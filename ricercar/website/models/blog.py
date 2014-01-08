@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Categorie(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     nom = models.CharField(max_length=30)
 
@@ -14,7 +14,7 @@ class Categorie(models.Model):
 
 class Article(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     titre = models.CharField(max_length=100)
     auteur = models.ForeignKey(User, related_name="actualites")

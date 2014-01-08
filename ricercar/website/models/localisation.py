@@ -2,7 +2,7 @@ from django.db import models
 
 class Localisation(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     pays_francais = models.CharField(max_length=255)
     pays_normalise_langue = models.CharField(max_length=255)

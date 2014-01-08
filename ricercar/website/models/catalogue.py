@@ -2,7 +2,7 @@ from django.db import models
 
 class Catalogue(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     RISM_A = 'RA'
     RISM_B = 'RB'

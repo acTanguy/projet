@@ -1,7 +1,12 @@
-{% extends "basegesualdo.html" %}
+{% extends "gesualdo_base.html" %}
 
-{% block content%}
+{% block contentGesualdo%}
 
-hello world
+{% for recueil in gesualdo_recueil %}
+                
+                <li><a href="{{recueil.lien}}">{{recueil.titre}}</a></li>
+
+               
+              {% endfor %}
 
 {% endblock %}

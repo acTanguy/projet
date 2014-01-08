@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^logout/', LogoutView.as_view(), name="logout-view"),
 
     url(r'^$', home),
-    url(r'^projets/', 'ricercar.views.main.projets', name='projets'),
+    url(r'^projets/', 'ricercar.website.views.main.projets', name='projets'),
 )
 
 

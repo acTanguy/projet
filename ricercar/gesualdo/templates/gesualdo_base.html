@@ -23,7 +23,7 @@
           <li class="divider"></li>
           <li><a href="#"><strong>Pièces profanes</strong></a></li>
             <ul>
-              {% for recueil in recueils %}
+              {% for recueil in gesualdo_recueil %}
                 
                 <li><a href="{{recueil.lien}}">{{recueil.titre}}</a></li>
 
@@ -52,7 +52,7 @@
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>
-{% block content %}
+{% block contentGesualdo %}
 
 {% endblock %}
 {% endblock %}

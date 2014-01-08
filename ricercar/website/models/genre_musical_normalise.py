@@ -3,7 +3,7 @@ from ricercar.website.models.localisation import Localisation
 
 class GenreMusicalNormalise(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     PROFANE = 'profane'
     RELIGIEUX = 'religieux'

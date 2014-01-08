@@ -3,7 +3,7 @@ from ricercar.website.models.localisation import Localisation
 
 class Bibliotheque(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     nom = models.CharField(max_length=255, blank=True, null=True)
     localisation = models.ForeignKey("Localisation")

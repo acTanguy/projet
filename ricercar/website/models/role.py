@@ -2,7 +2,7 @@ from django.db import models
 
 class Role(models.Model):
     class Meta:
-        app_label="ricercar"
+        app_label="website"
 
     role = models.CharField(max_length=255)
 
