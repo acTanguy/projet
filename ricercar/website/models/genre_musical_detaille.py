@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class GenreMusicalDetaille(models.Model):
     class Meta:
         app_label="website"
@@ -24,3 +25,4 @@ class GenreMusicalDetaille(models.Model):
 
     def __unicode__(self):
         return u"{0}".format(self.genre_musical)
+

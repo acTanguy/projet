@@ -22,3 +22,45 @@ class Personne(models.Model):
 
     def __unicode__(self):
         return u"{0}, ({1})".format(self.nom, self.prenom)
+
+@receiver(post_save, sender=Personne)
+def solr_index(sender, instance, created, **kwarg):
+    import uuid
+    from django.conf import settings
+    import solr
+
+    solrconn = solr.SolrConnection(settings.SOLR_SERVER)
+    record = solrconn.query("type:website_personne item_id:{0}".format(instance.id))
+    if record:
+        # the record already exists, so we'll remove the first
+        solrconn.delete(record.results[0]['id'])
+
+    personne = instance
+    d = {
+        'type': 'website_personne',
+        'id': str(uuid.uuid4()),
+        'item_id':personne.id,
+        'nom' :personne.nom,
+        'prenom':personne.prenom,
+        'variante_nom':personne.variante_nom,
+        'nom_bref':personne.nom_bref,
+        'date_naissance':personne.date_naissance,
+        'lieu_naissance':personne.lieu_naissance,
+        'date_mort':personne.date_mort,
+        'lieu_mort':personne.lieu_mort,
+        'role':personne.role,
+        'lieu_activite':personne.lieu_activite,
+        'periode_activite':personne.periode_activite,
+
+    }
+    solrconn.add(**d)
+    solrconn.commit()
+
+@receiver(post_delete, sender=Personne)
+def solr_delete(sender, instance, created, **kwargs):
+    from django.conf import settings
+    import solr
+    solrconn = solr.SolrConnection(settings.SOLR_SERVER)
+    record = solrconn.query("type:website_personne item_id:{0}".format(instance.id))
+    solrconn.delete(record.results[0]['id'])
+    solrconn.commit()
