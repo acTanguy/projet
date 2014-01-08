@@ -1,10 +1,8 @@
-from django.db import models
+from ricercar.website.models.role import Role
 
-class Role(models.Model):
+from rest_framework import serializers
+
+class RoleSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
-        app_label="website"
-
-    role = models.CharField(max_length=255)
-
-    def __unicode__(self):
-        return u"{0}".format(self.role)
+        model = Role
