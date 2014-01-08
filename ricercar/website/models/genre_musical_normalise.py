@@ -14,7 +14,7 @@ class GenreMusicalNormalise(models.Model):
     )
 
     style = models.CharField(max_length=128, choices=CHOIX_STYLE, default=PROFANE)
-    provenance = models.ForeignKey("Localisation")
+    provenance = models.CharField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
         return u"{0}, ({1})".format(self.style, self.provenance)

@@ -17,6 +17,7 @@ class Personne(models.Model):
     lieu_activite = models.ManyToManyField("website.Localisation", related_name='lieu_d_activite_de', blank=True, null=True)
     periode_activite = models.CharField(max_length=16, blank=True, null=True)
 
+    bibliographie = models.TextField(blank=True, null=True)
     remarques = models.TextField(blank=True, null=True)
 
     def __unicode__(self):

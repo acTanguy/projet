@@ -8,7 +8,8 @@ from ricercar.website.models.blog import Categorie
 from ricercar.website.models.recueil import Recueil
 from ricercar.website.models.projet import Projet
 from ricercar.website.models.genre_musical_normalise import GenreMusicalNormalise
-
+from ricercar.website.models.exemplaire import Exemplaire
+from ricercar.website.models.voix import Voix
 
 class LocalisationAdmin(ModelAdmin):
     pass
@@ -37,6 +38,12 @@ class ProjetAdmin(ModelAdmin):
 class GenreMusicalNormaliseAdmin(ModelAdmin):
     pass
 
+class ExemplaireAdmin(ModelAdmin):
+    filter_horizontal=('voix',)
+
+class VoixAdmin(ModelAdmin):
+    pass
+
 site.register(Localisation, LocalisationAdmin)
 site.register(Bibliotheque, BibliothequeAdmin)
 site.register(Role, RoleAdmin)
@@ -46,3 +53,5 @@ site.register(Categorie, CategorieAdmin)
 site.register(Recueil, ReceuilAdmin)
 site.register(Projet, ProjetAdmin)
 site.register(GenreMusicalNormalise, GenreMusicalNormaliseAdmin)
+site.register(Exemplaire, ExemplaireAdmin)
+site.register(Voix, VoixAdmin)

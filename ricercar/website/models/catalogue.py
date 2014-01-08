@@ -21,6 +21,8 @@ class Catalogue(models.Model):
     LEWIS = 'LW'
     SARTORI = 'SA'
     WEAVER = 'WE'
+    PATALAS ='PA'
+    GOOVEARTS = 'GO'
 
     CHOIX_CATALOGUE = (
         (RISM_A, 'Rism A'),
@@ -40,9 +42,10 @@ class Catalogue(models.Model):
         (LEWIS,'Lewis'),
         (SARTORI,'Sartori'),
         (WEAVER,'Weaver'),
+        (PATALAS, 'Patalas'),
+        (GOOVEARTS, 'Goovearts'),
     )
 
-    #now i don't know use that... depend of CESR. I think we have
 
     choix_catalogue = models.CharField(max_length=2, choices=CHOIX_CATALOGUE, default=RISM_A )
-    #but i don't know after.
+    identifiant = models.CharField(max_length=32, blank=True, null=True)

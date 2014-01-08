@@ -9,4 +9,5 @@ from ricercar.website.models.recueil import Recueil
 from ricercar.website.models.projet import Projet
 from ricercar.website.models.genre_musical_normalise import GenreMusicalNormalise
 from ricercar.website.models.blog import Article
-
+from ricercar.website.models.voix import Voix
+from ricercar.website.models.exemplaire import Exemplaire

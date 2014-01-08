@@ -21,20 +21,21 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Catalogue <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li class="divider"></li>
-          <li><a href="#"><strong>Pièces profanes</strong></a></li>
+          <li><a href="#"><strong>Pièces profanes</strong></a>
             <ul>
-              {% for recueil in gesualdo_recueil %}
-                
+              {% for recueil in gesualdo_recueil_profane %}
                 <li><a href="{{recueil.lien}}">{{recueil.titre}}</a></li>
-
-               
               {% endfor %}
             </ul>
+          </li>
           <li class="divider"></li>
-          <li><a href="#"><strong>Pièces religieuses</strong></a></li>
-            <ul><li><a href="#">Premier livre</a></li>
-            <li><a href="#">second livre</a></li></ul>
-
+          <li><a href="#"><strong>Pièces religieuses</strong></a>
+            <ul>
+              {% for recueil in gesualdo_recueil_religieux %}
+                <li><a href="{{recueil.lien}}">{{recueil.titre}}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
         </ul>
       </li>
     </ul>

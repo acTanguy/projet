@@ -9,9 +9,11 @@ from ricercar.website.models.genre_musical_normalise import GenreMusicalNormalis
 def home(request):
 
     projet_model = Projet.objects.filter(nom_du_projet='gesualdo')
-    genre = GenreMusicalNormalise.objects.filter(style='profane')
-    gesualdo_recueil = Recueil.objects.filter(projet=projet_model).filter(genre_musical_normalise=genre)
+    genre_profane = GenreMusicalNormalise.objects.filter(style='profane')
+    genre_religieux = GenreMusicalNormalise.objects.filter(style='religieux')
+    gesualdo_recueil_profane = Recueil.objects.filter(projet=projet_model).filter(genre_musical_normalise=genre_profane)
+    gesualdo_recueil_religieux = Recueil.objects.filter(projet=projet_model).filter(genre_musical_normalise=genre_religieux)
 
-    return render(request, "gesualdo_accueil.html", {"gesualdo_recueil":gesualdo_recueil})
+    return render(request, "gesualdo_accueil.html", {"gesualdo_recueil_profane":gesualdo_recueil_profane})
 
 
