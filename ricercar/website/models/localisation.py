@@ -4,8 +4,8 @@ class Localisation(models.Model):
     class Meta:
         app_label="website"
 
-    pays_francais = models.CharField(max_length=255)
     pays_normalise_langue = models.CharField(max_length=255)
+    pays_francais = models.CharField(max_length=255)
     nom_ville_normalise_langue = models.CharField(max_length=255, blank=True, null=True)
     nom_ville_francais = models.CharField(max_length=255, blank=True, null=True)
     nom_ville_source = models.CharField(max_length=255, blank=True, null=True)

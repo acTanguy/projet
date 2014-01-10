@@ -23,7 +23,7 @@ class Exemplaire(models.Model):
 
 
     def __unicode__(self):
-        return u"{0}".format(self.cote_exemplaire
+        return u"{0}".format(self.cote_exemplaire)
 
 @receiver(post_save, sender=Exemplaire)
 def solr_index(sender, instance, created, **kwarg):

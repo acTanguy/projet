@@ -10,6 +10,7 @@ from ricercar.website.models.projet import Projet
 from ricercar.website.models.genre_musical_normalise import GenreMusicalNormalise
 from ricercar.website.models.exemplaire import Exemplaire
 from ricercar.website.models.voix import Voix
+from ricercar.website.models.catalogue import Catalogue
 
 class LocalisationAdmin(ModelAdmin):
     pass
@@ -44,6 +45,9 @@ class ExemplaireAdmin(ModelAdmin):
 class VoixAdmin(ModelAdmin):
     pass
 
+class CatalogueAdmin(ModelAdmin):
+    pass
+
 site.register(Localisation, LocalisationAdmin)
 site.register(Bibliotheque, BibliothequeAdmin)
 site.register(Role, RoleAdmin)
@@ -55,3 +59,4 @@ site.register(Projet, ProjetAdmin)
 site.register(GenreMusicalNormalise, GenreMusicalNormaliseAdmin)
 site.register(Exemplaire, ExemplaireAdmin)
 site.register(Voix, VoixAdmin)
+site.register(Catalogue, CatalogueAdmin)

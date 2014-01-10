@@ -49,3 +49,6 @@ class Catalogue(models.Model):
 
     choix_catalogue = models.CharField(max_length=2, choices=CHOIX_CATALOGUE, default=RISM_A )
     identifiant = models.CharField(max_length=32, blank=True, null=True)
+
+    def __unicode__(self):
+        return u"{0}".format(self.identifiant)

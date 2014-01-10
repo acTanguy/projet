@@ -94,7 +94,7 @@ class Migration(SchemaMigration):
             ('poete', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['website.Personne'], null=True, blank=True)),
             ('nombre_de_voix', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('formation', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('nombre_de_voix_manquante', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
+            ('nombre_de_voix_manquantes', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('pdf_link', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('mei_link', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('remarques', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
@@ -144,9 +144,8 @@ class Migration(SchemaMigration):
             ('titre_traduit', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('support', self.gf('django.db.models.fields.CharField')(default='imp', max_length=3)),
             ('ville_edition', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='lieu_d_edition_de', null=True, to=orm['website.Localisation'])),
-            ('datation', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
+            ('datation', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('editeur', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='editions', null=True, to=orm['website.Personne'])),
-            ('compositeurs', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['website.Personne'], null=True, blank=True)),
             ('nombre_pieces', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('cahiers', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('cahiers_manquants', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
@@ -162,6 +161,15 @@ class Migration(SchemaMigration):
             ('catalogue', models.ForeignKey(orm['website.catalogue'], null=False))
         ))
         db.create_unique(m2m_table_name, ['recueil_id', 'catalogue_id'])
+
+        # Adding M2M table for field compositeurs on 'Recueil'
+        m2m_table_name = db.shorten_name(u'website_recueil_compositeurs')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('recueil', models.ForeignKey(orm['website.recueil'], null=False)),
+            ('personne', models.ForeignKey(orm['website.personne'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['recueil_id', 'personne_id'])
 
         # Adding M2M table for field genre_musical_normalise on 'Recueil'
         m2m_table_name = db.shorten_name(u'website_recueil_genre_musical_normalise')
@@ -207,6 +215,15 @@ class Migration(SchemaMigration):
             ('projet', models.ForeignKey(orm['website.projet'], null=False))
         ))
         db.create_unique(m2m_table_name, ['recueil_id', 'projet_id'])
+
+        # Adding M2M table for field exemplaire on 'Recueil'
+        m2m_table_name = db.shorten_name(u'website_recueil_exemplaire')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('recueil', models.ForeignKey(orm['website.recueil'], null=False)),
+            ('exemplaire', models.ForeignKey(orm['website.exemplaire'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['recueil_id', 'exemplaire_id'])
 
         # Adding model 'Projet'
         db.create_table(u'website_projet', (
@@ -317,6 +334,9 @@ class Migration(SchemaMigration):
         # Removing M2M table for field catalogue_id on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_catalogue_id'))
 
+        # Removing M2M table for field compositeurs on 'Recueil'
+        db.delete_table(db.shorten_name(u'website_recueil_compositeurs'))
+
         # Removing M2M table for field genre_musical_normalise on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_genre_musical_normalise'))
 
@@ -331,6 +351,9 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field projet on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_projet'))
+
+        # Removing M2M table for field exemplaire on 'Recueil'
+        db.delete_table(db.shorten_name(u'website_recueil_exemplaire'))
 
         # Deleting model 'Projet'
         db.delete_table(u'website_projet')
@@ -477,7 +500,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mei_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'nombre_de_voix': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'nombre_de_voix_manquante': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
+            'nombre_de_voix_manquantes': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'pdf_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'poete': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['website.Personne']", 'null': 'True', 'blank': 'True'}),
             'recueil_id': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pieces'", 'null': 'True', 'to': "orm['website.Recueil']"}),
@@ -495,9 +518,10 @@ class Migration(SchemaMigration):
             'cahiers': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'cahiers_manquants': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'catalogue_id': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueil'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.Catalogue']"}),
-            'compositeurs': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['website.Personne']", 'null': 'True', 'blank': 'True'}),
-            'datation': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'compositeurs': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['website.Personne']", 'null': 'True', 'blank': 'True'}),
+            'datation': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'editeur': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'editions'", 'null': 'True', 'to': "orm['website.Personne']"}),
+            'exemplaire': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'autres_exemplaires'", 'symmetrical': 'False', 'to': "orm['website.Exemplaire']"}),
             'genre_musical_detaille': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueils'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.GenreMusicalDetaille']"}),
             'genre_musical_normalise': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueils'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.GenreMusicalNormalise']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
