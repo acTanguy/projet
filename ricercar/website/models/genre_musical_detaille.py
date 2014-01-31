@@ -21,7 +21,7 @@ class GenreMusicalDetaille(models.Model):
         (CHANSON, 'Chanson'),
     )
 
-    genre_musical = models.CharField(max_length=255, choices=CHOIX_GENRE, default=None)
+    genre_musical = models.CharField(max_length=255, choices=CHOIX_GENRE, default=None, unique=True)
 
     def __unicode__(self):
         return u"{0}".format(self.genre_musical)

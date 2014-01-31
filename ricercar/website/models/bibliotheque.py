@@ -11,4 +11,4 @@ class Bibliotheque(models.Model):
 
 
     def __unicode__(self):
-        return u"{0}".format(self.nom_normalise)
+        return u"{0} / {1}. {02}".format(self.sigle_rism, self.localisation, self.nom_normalise)

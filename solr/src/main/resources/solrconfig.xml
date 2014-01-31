@@ -111,7 +111,7 @@
        replication is in use, this should match the replication
        configuration.
     -->
-  <dataDir>/Users/antoine/solr/ricercar-solr</dataDir>
+  <dataDir>/var/db/solr/ricercar-solr</dataDir>
 
 
   <!-- The DirectoryFactory to use for indexes.

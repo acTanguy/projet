@@ -11,8 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'Localisation'
         db.create_table(u'website_localisation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('pays_francais', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('pays_normalise_langue', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('pays_francais', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('nom_ville_normalise_langue', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('nom_ville_francais', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('nom_ville_source', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
@@ -24,14 +24,14 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('nom_normalise', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('localisation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['website.Localisation'])),
-            ('sigle_rism', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('sigle_rism', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True, null=True, blank=True)),
         ))
         db.send_create_signal('website', ['Bibliotheque'])
 
         # Adding model 'Role'
         db.create_table(u'website_role', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('role', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('role', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal('website', ['Role'])
 
@@ -73,15 +73,15 @@ class Migration(SchemaMigration):
         # Adding model 'GenreMusicalDetaille'
         db.create_table(u'website_genremusicaldetaille', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('genre_musical', self.gf('django.db.models.fields.CharField')(default=None, max_length=255)),
+            ('genre_musical', self.gf('django.db.models.fields.CharField')(default=None, unique=True, max_length=255)),
         ))
         db.send_create_signal('website', ['GenreMusicalDetaille'])
 
         # Adding model 'Catalogue'
         db.create_table(u'website_catalogue', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('choix_catalogue', self.gf('django.db.models.fields.CharField')(default='RA', max_length=2)),
-            ('identifiant', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('choix_catalogue', self.gf('django.db.models.fields.CharField')(default='RISM_A', max_length=10)),
+            ('identifiant', self.gf('django.db.models.fields.CharField')(max_length=32, unique=True, null=True, blank=True)),
         ))
         db.send_create_signal('website', ['Catalogue'])
 
@@ -142,25 +142,15 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('titre', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('titre_traduit', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('catalogue_id', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='recueil', null=True, to=orm['website.Catalogue'])),
             ('support', self.gf('django.db.models.fields.CharField')(default='imp', max_length=3)),
             ('ville_edition', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='lieu_d_edition_de', null=True, to=orm['website.Localisation'])),
             ('datation', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('editeur', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='editions', null=True, to=orm['website.Personne'])),
             ('nombre_pieces', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
-            ('cahiers', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
-            ('cahiers_manquants', self.gf('django.db.models.fields.IntegerField')(max_length=4, null=True, blank=True)),
             ('remarques', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal('website', ['Recueil'])
-
-        # Adding M2M table for field catalogue_id on 'Recueil'
-        m2m_table_name = db.shorten_name(u'website_recueil_catalogue_id')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('recueil', models.ForeignKey(orm['website.recueil'], null=False)),
-            ('catalogue', models.ForeignKey(orm['website.catalogue'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['recueil_id', 'catalogue_id'])
 
         # Adding M2M table for field compositeurs on 'Recueil'
         m2m_table_name = db.shorten_name(u'website_recueil_compositeurs')
@@ -188,15 +178,6 @@ class Migration(SchemaMigration):
             ('genremusicaldetaille', models.ForeignKey(orm['website.genremusicaldetaille'], null=False))
         ))
         db.create_unique(m2m_table_name, ['recueil_id', 'genremusicaldetaille_id'])
-
-        # Adding M2M table for field reemission on 'Recueil'
-        m2m_table_name = db.shorten_name(u'website_recueil_reemission')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('from_recueil', models.ForeignKey(orm['website.recueil'], null=False)),
-            ('to_recueil', models.ForeignKey(orm['website.recueil'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['from_recueil_id', 'to_recueil_id'])
 
         # Adding M2M table for field reedition on 'Recueil'
         m2m_table_name = db.shorten_name(u'website_recueil_reedition')
@@ -263,7 +244,7 @@ class Migration(SchemaMigration):
         # Adding model 'Voix'
         db.create_table(u'website_voix', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('voix', self.gf('django.db.models.fields.CharField')(default='Cantus', max_length=128)),
+            ('voix', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
         ))
         db.send_create_signal('website', ['Voix'])
 
@@ -331,9 +312,6 @@ class Migration(SchemaMigration):
         # Deleting model 'Recueil'
         db.delete_table(u'website_recueil')
 
-        # Removing M2M table for field catalogue_id on 'Recueil'
-        db.delete_table(db.shorten_name(u'website_recueil_catalogue_id'))
-
         # Removing M2M table for field compositeurs on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_compositeurs'))
 
@@ -342,9 +320,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field genre_musical_detaille on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_genre_musical_detaille'))
-
-        # Removing M2M table for field reemission on 'Recueil'
-        db.delete_table(db.shorten_name(u'website_recueil_reemission'))
 
         # Removing M2M table for field reedition on 'Recueil'
         db.delete_table(db.shorten_name(u'website_recueil_reedition'))
@@ -429,13 +404,13 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'localisation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['website.Localisation']"}),
             'nom_normalise': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'sigle_rism': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
+            'sigle_rism': ('django.db.models.fields.CharField', [], {'max_length': '255', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         'website.catalogue': {
             'Meta': {'object_name': 'Catalogue'},
-            'choix_catalogue': ('django.db.models.fields.CharField', [], {'default': "'RA'", 'max_length': '2'}),
+            'choix_catalogue': ('django.db.models.fields.CharField', [], {'default': "'RISM_A'", 'max_length': '10'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'identifiant': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
+            'identifiant': ('django.db.models.fields.CharField', [], {'max_length': '32', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         'website.categorie': {
             'Meta': {'object_name': 'Categorie'},
@@ -454,7 +429,7 @@ class Migration(SchemaMigration):
         },
         'website.genremusicaldetaille': {
             'Meta': {'object_name': 'GenreMusicalDetaille'},
-            'genre_musical': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '255'}),
+            'genre_musical': ('django.db.models.fields.CharField', [], {'default': 'None', 'unique': 'True', 'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'website.genremusicalnormalise': {
@@ -515,20 +490,17 @@ class Migration(SchemaMigration):
         },
         'website.recueil': {
             'Meta': {'object_name': 'Recueil'},
-            'cahiers': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'cahiers_manquants': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
-            'catalogue_id': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueil'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.Catalogue']"}),
+            'catalogue_id': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'recueil'", 'null': 'True', 'to': "orm['website.Catalogue']"}),
             'compositeurs': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['website.Personne']", 'null': 'True', 'blank': 'True'}),
             'datation': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'editeur': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'editions'", 'null': 'True', 'to': "orm['website.Personne']"}),
-            'exemplaire': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'autres_exemplaires'", 'symmetrical': 'False', 'to': "orm['website.Exemplaire']"}),
+            'exemplaire': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'autres_exemplaires'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.Exemplaire']"}),
             'genre_musical_detaille': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueils'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.GenreMusicalDetaille']"}),
             'genre_musical_normalise': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'recueils'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['website.GenreMusicalNormalise']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'nombre_pieces': ('django.db.models.fields.IntegerField', [], {'max_length': '4', 'null': 'True', 'blank': 'True'}),
             'projet': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'dans'", 'symmetrical': 'False', 'to': "orm['website.Projet']"}),
             'reedition': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'reedition_rel_+'", 'null': 'True', 'to': "orm['website.Recueil']"}),
-            'reemission': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'reemission_rel_+'", 'null': 'True', 'to': "orm['website.Recueil']"}),
             'remarques': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'support': ('django.db.models.fields.CharField', [], {'default': "'imp'", 'max_length': '3'}),
             'titre': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -538,12 +510,12 @@ class Migration(SchemaMigration):
         'website.role': {
             'Meta': {'object_name': 'Role'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'role': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'role': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
         'website.voix': {
             'Meta': {'object_name': 'Voix'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'voix': ('django.db.models.fields.CharField', [], {'default': "'Cantus'", 'max_length': '128'})
+            'voix': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         }
     }
 

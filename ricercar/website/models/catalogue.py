@@ -4,25 +4,25 @@ class Catalogue(models.Model):
     class Meta:
         app_label="website"
 
-    RISM_A = 'RA'
-    RISM_B = 'RB'
-    CENSUS = 'CE'
-    VOGEL = 'VO'
-    BROWN = 'BR'
-    HEARTZ = 'HE'
-    VANHULST = 'VA'
-    LESURE = 'LE'
-    POGUE = 'PO'
-    AGEE = 'AG'
-    BERNSTEIN = 'BE'
-    BOETTICHER = 'BO'
-    BOORMAN = 'BO'
-    GUILLO = 'GU'
-    LEWIS = 'LW'
-    SARTORI = 'SA'
-    WEAVER = 'WE'
-    PATALAS ='PA'
-    GOOVEARTS = 'GO'
+    RISM_A = 'RISM_A'
+    RISM_B = 'RISM_B'
+    CENSUS = 'CENSUS'
+    VOGEL = 'VOGEL'
+    BROWN = 'BROWN'
+    HEARTZ = 'HEARTZ'
+    VANHULST = 'VANHULST'
+    LESURE = 'LESURE'
+    POGUE = 'POGUE'
+    AGEE = 'AGEE'
+    BERNSTEIN = 'BERNSTEIN'
+    BOETTICHER = 'BOETTICHER'
+    BOORMAN = 'BOORMAN'
+    GUILLO = 'GUILLO'
+    LEWIS = 'LEWIS'
+    SARTORI = 'SARTORI'
+    WEAVER = 'WEAVER'
+    PATALAS ='PATALAS'
+    GOOVEARTS = 'GOOVEARTS'
 
     CHOIX_CATALOGUE = (
         (RISM_A, 'Rism A'),
@@ -47,8 +47,8 @@ class Catalogue(models.Model):
     )
 
 
-    choix_catalogue = models.CharField(max_length=2, choices=CHOIX_CATALOGUE, default=RISM_A )
-    identifiant = models.CharField(max_length=32, blank=True, null=True)
+    choix_catalogue = models.CharField(max_length=10, choices=CHOIX_CATALOGUE, default=RISM_A )
+    identifiant = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __unicode__(self):
-        return u"{0}".format(self.identifiant)
+        return u"{0}, ({1})".format(self.identifiant, self.choix_catalogue)

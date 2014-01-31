@@ -6,8 +6,8 @@
 	<artifactId>ricercar-solr</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Solr Instance for the Goudimel site</name>
-	<url>http://ricercar.cesr.univ-tours.fr/</url>
+	<name>Solr Instance for the Ricercar site</name>
+	<url>http://cesr.univ-tours.fr</url>
 
 	<dependencies>
 		<dependency>

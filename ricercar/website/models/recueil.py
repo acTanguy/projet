@@ -25,60 +25,10 @@ class Recueil(models.Model):
     nombre_pieces = models.IntegerField(max_length=4, blank=True, null=True)
     genre_musical_normalise = models.ManyToManyField("website.GenreMusicalNormalise", related_name='recueils', blank=True, null=True)
     genre_musical_detaille = models.ManyToManyField("website.GenreMusicalDetaille", related_name='recueils', blank=True, null=True)
-    reemission = models.ManyToManyField("self", blank=True, null=True)
     reedition = models.ManyToManyField("self", blank=True, null=True)
     remarques = models.TextField(blank=True, null=True)
     projet = models.ManyToManyField("website.Projet", related_name='dans')
     exemplaire = models.ManyToManyField("website.Exemplaire", related_name='autres_exemplaires', blank=True, null=True)
 
     def __unicode__(self):
-        return u"{0}".format(self.titre)
-
-@receiver(post_save, sender=Recueil)
-def solr_index(sender, instance, created, **kwarg):
-    import uuid
-    from django.conf import settings
-    import solr
-
-    solrconn = solr.SolrConnection(settings.SOLR_SERVER)
-    record = solrconn.query("type:website_recueil item_id:{0}".format(instance.id))
-    if record:
-        # the record already exists, so we'll remove the first
-        solrconn.delete(record.results[0]['id'])
-
-    recueil = instance
-    d = {
-        'type': 'website_recueil',
-        'id': str(uuid.uuid4()),
-        'item_id':recueil.id,
-        'titre':recueil.titre,
-        'titre_traduit':recueil.titre_traduit,
-        'catalogue_id':recueil.catalogue_id,
-        'support':recueil.support,
-        'ville_edition':recueil.ville_edition,
-        'datation':recueil.datation,
-        'editeur':recueil.editeur,
-        'compositeurs':recueil.compositeurs,
-        'nombre_pieces':recueil.nombre_pieces,
-        'cahiers':recueil.cahiers,
-        'cahiers_manquants':recueil.cahiers_manquants,
-        'genre_musical_normalise':recueil.genre_musical_normalise,
-        'genre_musical_detaille':recueil.genre_musical_detaille,
-        'reemission':recueil.reemission,
-        'reedition':recueil.reedition,
-        'remarques':recueil.remarques,
-        'projet':recueil.projet,
-        'exemplaire':recueil.exemplaire,
-
-    }
-    solrconn.add(**d)
-    solrconn.commit()
-
-@receiver(post_delete, sender=Recueil)
-def solr_delete(sender, instance, created, **kwargs):
-    from django.conf import settings
-    import solr
-    solrconn = solr.SolrConnection(settings.SOLR_SERVER)
-    record = solrconn.query("type:website_recueil item_id:{0}".format(instance.id))
-    solrconn.delete(record.results[0]['id'])
-    solrconn.commit()
+        return u"{0}".format(self.catalogue_id)
