@@ -5,12 +5,12 @@ class GenreMusicalDetaille(models.Model):
     class Meta:
         app_label="website"
 
-    MADRIGAL = 'MA'
-    MOTET = 'MO'
-    MESSE = 'ME'
-    CANZONE = 'CA'
-    CANTATE = 'CT'
-    CHANSON = 'CH'
+    MADRIGAL = 'Madrigal'
+    MOTET = 'Motet'
+    MESSE = 'Messe'
+    CANZONE = 'Canzone'
+    CANTATE = 'Cantate'
+    CHANSON = 'Chanson'
 
     CHOIX_GENRE = (
         (MADRIGAL, 'Madrigal'),

@@ -177,3 +177,5 @@ def solr_delete(sender, instance, created, **kwargs):
     solrconn.delete(record.results[0]['id'])
     solrconn.commit()
 
+
+

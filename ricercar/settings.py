@@ -90,4 +90,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SOLR_SERVER = "http://localhost:8080/ricercar-solr"
+SOLR_SERVER = "http://localhost:8090/ricercar-solr"
