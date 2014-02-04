@@ -538,7 +538,7 @@
     </types>
 
     <fields>
-        <field name="id" type="int" indexed="true" stored="true" required="true" />
+        <field name="id" type="string" indexed="true" stored="true" required="true" />
         <field name="type" type="string" indexed="true" stored="true" />
         <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
         <field name="item_id" type="string" indexed="true" stored="true" />
@@ -548,19 +548,22 @@
 
         <!-- recueil fields -->
         <field name="titre_traduit" type="string" indexed="true" stored="true"/>
-        <field name="catalogue_id" type="int" indexed="true" stored="true" />
+
         <field name="support" type="string" indexed="true" stored="true" />
-        <field name="ville_edition" type="int" indexed="true" stored="true" />
         <field name="datation" type="string" indexed="true" stored="true" />
-        <field name="editeur" type="int" indexed="true" stored="true" />
-        <field name="compositeurs" type="int" indexed="true" stored="true" />
+        <field name="compositeurs" type="string" indexed="true" stored="true" multiValued="true"/>
         <field name="nombre_pieces" type="int" indexed="true" stored="true" />
-        <field name="genre_musical_normalise" type="int" indexed="true" stored="true" />
-        <field name="genre_musical_detaille" type="int" indexed="true" stored="true" />
-        <field name="reedition" type="int" indexed="true" stored="true" />
         <field name="remarques" type="text_general" indexed="true" stored="true" />
-        <field name="projet" type="int" indexed="true" stored="true" />
-        <field name="exemplaire" type="string" indexed="true" stored="true" />
+        <field name="catalogue" type="string" indexed="true" stored="true" />
+        <field name="ville_edition" type="string" indexed="true" stored="true" />
+        <field name="projet" type="string" indexed="true" stored="true" multiValued="true"/>
+
+        <!-- personne -->
+        <field name="nom" type="string" indexed="true" stored="true"/>
+        <field name="prenom" type="string" indexed="true" stored="true"/>
+        <field name="variante_nom" type="string" indexed="true" stored="true"/>
+        <field name="nom_bref" type="string" indexed="true" stored="true"/>
+
 
     </fields>
 

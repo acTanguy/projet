@@ -6,6 +6,8 @@ from django.db.models.signals import post_save, post_delete
 class Recueil(models.Model):
     class Meta:
         app_label="website"
+        verbose_name = "Recueil"
+        verbose_name_plural = "Recueils"
 
     IMPRIME = 'imp'
     MANUSCRIT = 'ms'
@@ -39,6 +41,7 @@ def solr_index(sender, instance, created, **kwarg):
     from django.conf import settings
     import solr
 
+
     solrconn = solr.SolrConnection(settings.SOLR_SERVER)
     record = solrconn.query("type:website_recueil item_id:{0}".format(instance.id))
     if record:
@@ -46,29 +49,42 @@ def solr_index(sender, instance, created, **kwarg):
         solrconn.delete(record.results[0]['id'])
 
     recueil = instance
+
+    catalogueidentifiant = ""
+    if recueil.catalogue_id.choix_catalogue != "":
+        catalogueidentifiant = u"{0}, {1}".format(recueil.catalogue_id.choix_catalogue, recueil.catalogue_id.identifiant)
+    else:
+        catalogueidentifiant = u"{0}".format(recueil.catalogue_id.identifiant)
+
+    ville = ""
+    if recueil.ville_edition.nom_ville_normalise_langue !="":
+        ville = u"{0}, ({1})".format(recueil.ville_edition.nom_ville_normalise_langue, recueil.ville_edition.pays_normalise_langue)
+    else:
+        ville = u"{0}".format(recueil.ville_edition.pays_normalise_langue)
+
+    projetnom = u"{0}".format(recueil.projet.all().values_list('nom_du_projet'))
+
+
     d = {
         'type': 'website_recueil',
         'id': str(uuid.uuid4()),
         'item_id':recueil.id,
         'titre':recueil.titre,
         'titre_traduit':recueil.titre_traduit,
-        'catalogue_id':recueil.catalogue_id,
         'support':recueil.support,
-        'ville_edition':recueil.ville_edition,
         'datation':recueil.datation,
-        'editeur':recueil.editeur,
-        'compositeurs':recueil.compositeurs,
+        'compositeurs':recueil.compositeurs.all().values_list('nom'),
         'nombre_pieces':recueil.nombre_pieces,
-        'genre_musical_normalise':recueil.genre_musical_normalise,
-        'genre_musical_detaille':recueil.genre_musical_detaille,
-        'reedition':recueil.reedition,
         'remarques':recueil.remarques,
-        'projet':recueil.projet,
-        'exemplaire':recueil.exemplaire,
+        'catalogue':catalogueidentifiant,
+        'ville_edition':ville,
+        'projet':projetnom,
+
 
     }
     solrconn.add(**d)
     solrconn.commit()
+
 
 @receiver(post_delete, sender=Recueil)
 def solr_delete(sender, instance, created, **kwargs):

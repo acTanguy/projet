@@ -4,6 +4,8 @@ from django.db import models
 class GenreMusicalDetaille(models.Model):
     class Meta:
         app_label="website"
+        verbose_name = "Genre Musical Detaille"
+        verbose_name_plural = "Genres Musicaux Detailles"
 
     MADRIGAL = 'Madrigal'
     MOTET = 'Motet'

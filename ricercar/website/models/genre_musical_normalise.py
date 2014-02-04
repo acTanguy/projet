@@ -4,6 +4,8 @@ from ricercar.website.models.localisation import Localisation
 class GenreMusicalNormalise(models.Model):
     class Meta:
         app_label="website"
+        verbose_name = "Genre Musical Normalise"
+        verbose_name_plural = "Genres Musicaux Normalises"
 
     PROFANE = 'profane'
     RELIGIEUX = 'religieux'
